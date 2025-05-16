@@ -1,0 +1,7 @@
+flask
+marker-pdf
+transformers[torch]
+peft
+datasets
+#torch       # match your CUDA/CPU setup
+rarfile     # optional, for .rar support

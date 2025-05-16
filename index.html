@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LLM Fine-Tuner</title>
+    <link rel="stylesheet" href="style/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 LLM Fine-Tuner</h1>
+            <p class="subtitle">Three-click fine-tuning pipeline</p>
+        </header>
+
+        <!-- Step 1: Upload -->
+        <div class="step-card">
+            <div class="step-header">
+                <span class="step-number">1</span>
+                <h2>Upload Documents</h2>
+            </div>
+            <div class="step-content">
+                <div class="file-upload-area" id="fileUploadArea">
+                    <div class="upload-icon">📁</div>
+                    <p>Drop your archive here or click to browse</p>
+                    <p class="upload-hint">Supports ZIP, TAR, RAR formats</p>
+                    <input type="file" id="fileInput" accept=".zip,.tar,.tar.gz,.tgz,.rar" hidden>
+                </div>
+                <button class="btn btn-primary" id="uploadBtn" disabled>
+                    <span class="btn-icon">⬆️</span>
+                    Upload & Convert
+                </button>
+            </div>
+            <div class="progress-section" id="uploadProgress" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="uploadProgressFill"></div>
+                </div>
+                <div class="progress-details" id="uploadDetails">Starting upload...</div>
+            </div>
+        </div>
+
+        <!-- Step 2: Select Model -->
+        <div class="step-card" id="step2">
+            <div class="step-header">
+                <span class="step-number">2</span>
+                <h2>Select Model</h2>
+            </div>
+            <div class="step-content">
+                <select id="modelSelect" class="model-select" disabled>
+                    <option value="">— Complete upload first —</option>
+                </select>
+                <div class="model-info" id="modelInfo" style="display: none;">
+                    <div class="info-item">
+                        <span class="info-label">Size:</span>
+                        <span id="modelSize">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Family:</span>
+                        <span id="modelFamily">-</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Description:</span>
+                        <span id="modelDescription">-</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Fine-tune -->
+        <div class="step-card" id="step3">
+            <div class="step-header">
+                <span class="step-number">3</span>
+                <h2>Fine-tune Model</h2>
+            </div>
+            <div class="step-content">
+                <button class="btn btn-success" id="fineTuneBtn" disabled>
+                    <span class="btn-icon">⚙️</span>
+                    Start Fine-Tuning
+                </button>
+            </div>
+            <div class="progress-section" id="fineTuneProgress" style="display: none;">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="fineTuneProgressFill"></div>
+                </div>
+                <div class="progress-details" id="fineTuneDetails">Initializing...</div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="results-card" id="resultsCard" style="display: none;">
+            <div class="results-header">
+                <h2>✅ Fine-tuning Complete!</h2>
+            </div>
+            <div class="results-content">
+                <div class="success-message" id="successMessage"></div>
+                <button class="btn btn-download" id="downloadBtn" style="display: none;">
+                    <span class="btn-icon">⬇️</span>
+                    Download Fine-tuned Model
+                </button>
+            </div>
+        </div>
+
+        <!-- Status Messages -->
+        <div class="status-messages" id="statusMessages"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
