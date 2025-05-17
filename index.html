@@ -3,31 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LLM Fine-Tuner</title>
+    <title>TUNE - LLM Fine-Tuning Platform</title>
     <link rel="stylesheet" href="style/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Background Wave Animation -->
+    <div class="wave-container">
+        <svg class="wave" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path" d="M0,100 C300,50 600,150 1200,100 L1200,200 L0,200 Z">
+                <animate attributeName="d" 
+                    values="M0,100 C300,50 600,150 1200,100 L1200,200 L0,200 Z;
+                            M0,100 C300,150 600,50 1200,100 L1200,200 L0,200 Z;
+                            M0,100 C300,50 600,150 1200,100 L1200,200 L0,200 Z"
+                    dur="8s" 
+                    repeatCount="indefinite"/>
+            </path>
+        </svg>
+        <svg class="wave wave-2" viewBox="0 0 1200 200" xmlns="http://www.w3.org/2000/svg">
+            <path class="wave-path-2" d="M0,150 C400,100 800,200 1200,150 L1200,200 L0,200 Z">
+                <animate attributeName="d" 
+                    values="M0,150 C400,100 800,200 1200,150 L1200,200 L0,200 Z;
+                            M0,150 C400,200 800,100 1200,150 L1200,200 L0,200 Z;
+                            M0,150 C400,100 800,200 1200,150 L1200,200 L0,200 Z"
+                    dur="12s" 
+                    repeatCount="indefinite"/>
+            </path>
+        </svg>
+    </div>
+
     <div class="container">
         <header>
-            <h1>🚀 LLM Fine-Tuner</h1>
-            <p class="subtitle">Three-click fine-tuning pipeline</p>
+            <img src="style/images/Tune_logo.png" alt="TUNE Logo" class="logo">
+            <p class="subtitle">Upload, Select, Fine-Tune</p>
         </header>
 
         <!-- Step 1: Upload -->
-        <div class="step-card">
+        <div class="step-card" id="step1">
             <div class="step-header">
                 <span class="step-number">1</span>
                 <h2>Upload Documents</h2>
             </div>
             <div class="step-content">
                 <div class="file-upload-area" id="fileUploadArea">
-                    <div class="upload-icon">📁</div>
+                    <div class="upload-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                        </svg>
+                    </div>
                     <p>Drop your archive here or click to browse</p>
                     <p class="upload-hint">Supports ZIP, TAR, RAR formats</p>
                     <input type="file" id="fileInput" accept=".zip,.tar,.tar.gz,.tgz,.rar" hidden>
                 </div>
                 <button class="btn btn-primary" id="uploadBtn" disabled>
-                    <span class="btn-icon">⬆️</span>
+                    <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7,10 12,15 17,10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
                     Upload & Convert
                 </button>
             </div>
@@ -47,7 +81,7 @@
             </div>
             <div class="step-content">
                 <select id="modelSelect" class="model-select" disabled>
-                    <option value="">— Complete upload first —</option>
+                    <option value="">Complete upload first</option>
                 </select>
                 <div class="model-info" id="modelInfo" style="display: none;">
                     <div class="info-item">
@@ -74,7 +108,10 @@
             </div>
             <div class="step-content">
                 <button class="btn btn-success" id="fineTuneBtn" disabled>
-                    <span class="btn-icon">⚙️</span>
+                    <svg class="btn-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
                     Start Fine-Tuning
                 </button>
             </div>
@@ -89,12 +126,20 @@
         <!-- Results -->
         <div class="results-card" id="resultsCard" style="display: none;">
             <div class="results-header">
-                <h2>✅ Fine-tuning Complete!</h2>
+                <svg class="success-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22,4 12,14.01 9,11.01"/>
+                </svg>
+                <h2>Fine-tuning Complete!</h2>
             </div>
             <div class="results-content">
                 <div class="success-message" id="successMessage"></div>
                 <button class="btn btn-download" id="downloadBtn" style="display: none;">
-                    <span class="btn-icon">⬇️</span>
+                    <svg class="btn-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7,10 12,15 17,10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
                     Download Fine-tuned Model
                 </button>
             </div>

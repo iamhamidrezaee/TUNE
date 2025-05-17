@@ -1,2 +1,4 @@
 misc/*
 llms/*
+tune_pipeline.log
+*.log
