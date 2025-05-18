@@ -470,7 +470,7 @@ def download_and_fine_tune(session_id: str, model_id: str):
             progress_store[session_id]['details'] = f"Process failed: {str(e)}"
 
 def fine_tune_model(session_id: str, model_id: str, model_dir: str):
-    """Run fine-tuning process using downloaded model"""
+    """Run fine-tuning process using downloaded model with enhanced device support"""
     try:
         tracker = ProgressTracker(session_id, 100, "Fine-tuning")
         tracker.update(5, "Preparing for fine-tuning...")
@@ -487,21 +487,24 @@ def fine_tune_model(session_id: str, model_id: str, model_dir: str):
         
         tracker.update(15, "Loading base model...")
         
-        # Check if CUDA is available
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        # Get optimal device configuration with enhanced support 
+        device_config = get_device_configuration()
+        device = device_config["device_type"]
         
         # Load model with attention implementation to avoid sliding window warning
         model = AutoModelForCausalLM.from_pretrained(
             model_dir,
-            torch_dtype=torch.float16 if device == "cuda" else torch.float32,
-            low_cpu_mem_usage=True,
+            torch_dtype=device_config["data_type"],
+            low_cpu_mem_usage=device_config["low_cpu_mem_usage"],
             trust_remote_code=True,
-            attn_implementation="eager",  # Use eager attention to avoid sliding window warning
+            attn_implementation=device_config["attention_implementation"],
         )
         
         # Move model to device after loading
         if device == "cuda":
             model = model.cuda()
+        elif device == "mps":
+            model = model.to("mps")
         
         tracker.update(25, "Configuring LoRA...")
         
@@ -566,22 +569,36 @@ def fine_tune_model(session_id: str, model_id: str, model_dir: str):
         output_dir = os.path.join(OUTPUT_ROOT, output_id)
         os.makedirs(output_dir, exist_ok=True)
         
-        # Training arguments
+        # Adjust batch size and gradient accumulation based on device
+        if device == "cuda":
+            batch_size = 4 if torch.cuda.get_device_properties(0).total_memory >= 16 * 1024 * 1024 * 1024 else 1
+            gradient_accumulation_steps = 1 if batch_size == 1 else 4
+        elif device == "mps":
+            batch_size = 1
+            gradient_accumulation_steps = 8
+        else:  # CPU
+            batch_size = 1
+            gradient_accumulation_steps = 8
+        
+        # Training arguments with device-specific optimizations
         training_args = TrainingArguments(
             output_dir=output_dir,
-            per_device_train_batch_size=1,  # Reduce batch size for memory
-            gradient_accumulation_steps=4,
+            per_device_train_batch_size=batch_size,
+            gradient_accumulation_steps=gradient_accumulation_steps,
             num_train_epochs=3,
             learning_rate=2e-4,
             warmup_steps=100,
             logging_steps=10,
             save_steps=500,
             save_total_limit=2,
-            fp16=True if device == "cuda" else False,
-            dataloader_pin_memory=False,
+            fp16=(device == "cuda"),  # Only use fp16 on CUDA
+            dataloader_pin_memory=(device == "cuda"),
             remove_unused_columns=False,
             report_to=None,  # Disable wandb/tensorboard
             label_names=["labels"],  # Specify label names for PEFT
+            # Optimize for different devices
+            optim="adamw_torch" if device != "cpu" else "adamw_bnb_8bit",
+            ddp_find_unused_parameters=False,
         )
         
         # Calculate total steps
@@ -647,6 +664,7 @@ def fine_tune_model(session_id: str, model_id: str, model_dir: str):
             'huggingface_id': model_config['model_id'],
             'training_steps': total_steps,
             'documents_used': len(texts),
+            'device_used': device,
             'timestamp': datetime.now().isoformat()
         }
         
@@ -710,6 +728,50 @@ def internal_error(error):
 def not_found(error):
     logger.error(f"Not found: {error}")
     return jsonify(success=False, error='Not found'), 404
+
+# Enhanced device detection and configuration
+def get_device_configuration():
+    """
+    Determine the optimal device configuration for model loading and training.
+    Supports CUDA GPUs, Apple Silicon (MPS), and CPU fallback.
+    
+    Returns:
+        dict: Device configuration with device type, data type, and settings
+    """
+    config = {
+        "device_type": "cpu",
+        "data_type": torch.float32,
+        "attention_implementation": "eager",
+        "low_cpu_mem_usage": True
+    }
+    
+    # Check for CUDA GPU
+    if torch.cuda.is_available():
+        logger.info(f"CUDA GPU detected: {torch.cuda.get_device_name(0)}")
+        config["device_type"] = "cuda"
+        config["data_type"] = torch.float16
+        # Set specific settings for CUDA
+        if torch.cuda.get_device_properties(0).total_memory < 8 * 1024 * 1024 * 1024:  # Less than 8GB VRAM
+            logger.warning("Limited GPU memory detected. Using memory-efficient settings.")
+            config["low_cpu_mem_usage"] = True
+        
+    # Check for MPS (Metal Performance Shaders) on Mac
+    elif hasattr(torch, 'backends') and hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        logger.info("Apple Silicon GPU (MPS) detected")
+        config["device_type"] = "mps"
+        # MPS can use float16 for some models, but it's safer to default to float32
+        # and then override for specific compatible models
+        config["data_type"] = torch.float32
+        # Note: flash attention is not supported on MPS
+        
+    else:
+        # CPU fallback
+        logger.warning("No GPU detected. Using CPU for computation (this will be slow)")
+        config["device_type"] = "cpu"
+        config["data_type"] = torch.float32
+        config["low_cpu_mem_usage"] = True
+        
+    return config
 
 if __name__ == '__main__':
     logger.info("Starting LLM Fine-tuning Pipeline Server")
