@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TUNE - LLM Fine-Tuning Platform</title>
+    <!-- Favicon -->
+    <link rel="icon" href="style/images/favicon.png" type="image/png">
     <link rel="stylesheet" href="style/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -80,23 +82,50 @@
                 <h2>Select Model</h2>
             </div>
             <div class="step-content">
-                <select id="modelSelect" class="model-select" disabled>
-                    <option value="">Complete upload first</option>
-                </select>
-                <div class="model-info" id="modelInfo" style="display: none;">
-                    <div class="info-item">
-                        <span class="info-label">Size:</span>
-                        <span id="modelSize">-</span>
+                <div class="model-selection">
+                    <!-- Fast & Lightweight Category -->
+                    <div class="model-category">
+                        <div class="category-header">
+                            <svg class="category-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path>
+                            </svg>
+                            <h3 class="category-title">Fast & Lightweight</h3>
+                        </div>
+                        <div class="model-options" id="lightweight-models">
+                            <!-- Model options will be inserted here by JavaScript -->
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">Family:</span>
-                        <span id="modelFamily">-</span>
+                    
+                    <!-- Balanced Performance Category -->
+                    <div class="model-category">
+                        <div class="category-header">
+                            <svg class="category-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                                <path d="M12 6v6l4 2"></path>
+                            </svg>
+                            <h3 class="category-title">Balanced Performance</h3>
+                        </div>
+                        <div class="model-options" id="balanced-models">
+                            <!-- Model options will be inserted here by JavaScript -->
+                        </div>
                     </div>
-                    <div class="info-item">
-                        <span class="info-label">Description:</span>
-                        <span id="modelDescription">-</span>
+                    
+                    <!-- High Performance Category -->
+                    <div class="model-category">
+                        <div class="category-header">
+                            <svg class="category-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
+                            </svg>
+                            <h3 class="category-title">High Performance</h3>
+                        </div>
+                        <div class="model-options" id="performance-models">
+                            <!-- Model options will be inserted here by JavaScript -->
+                        </div>
                     </div>
                 </div>
+                
+                <!-- This is a hidden input to store the selected model ID -->
+                <input type="hidden" id="selectedModelId" value="">
             </div>
         </div>
 

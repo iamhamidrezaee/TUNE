@@ -35,9 +35,10 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 UPLOAD_ROOT = os.path.join(BASE_DIR, 'misc', 'uploads')
 CONVERT_ROOT = os.path.join(BASE_DIR, 'misc', 'converted')
 OUTPUT_ROOT = os.path.join(BASE_DIR, 'misc', 'outputs')
+MODEL_ROOT = os.path.join(BASE_DIR, 'misc', 'models')
 
 # Create directories
-for directory in [UPLOAD_ROOT, CONVERT_ROOT, OUTPUT_ROOT]:
+for directory in [UPLOAD_ROOT, CONVERT_ROOT, OUTPUT_ROOT, MODEL_ROOT]:
     os.makedirs(directory, exist_ok=True)
     logger.info(f"Created/verified directory: {directory}")
 
@@ -103,7 +104,7 @@ def index():
     """Serve the main HTML page"""
     return send_from_directory(BASE_DIR, 'index.html')
 
-@app.route('/models', methods=['GET'])
+@app.route('/api/models', methods=['GET'])
 def list_models():
     """Get list of available models"""
     logger.info("Fetching available models")
@@ -114,14 +115,14 @@ def list_models():
             'size': info.get('size', 'Unknown'),
             'family': info.get('family', 'Unknown'),
             'description': info.get('description', ''),
-            'local_path': info['local_path']
+            'huggingface_id': info.get('model_id', '')
         }
         for mid, info in MODELS.items()
     ]
     logger.info(f"Returning {len(models_list)} models")
-    return jsonify(models_list)
+    return jsonify({"success": True, "models": models_list})
 
-@app.route('/progress/<session_id>')
+@app.route('/api/progress/<session_id>')
 def get_progress(session_id):
     """Server-Sent Events endpoint for real-time progress"""
     def generate():
@@ -180,7 +181,7 @@ def get_all_files(directory: str) -> list:
             all_files.append(os.path.join(root, file))
     return all_files
 
-@app.route('/upload', methods=['POST'])
+@app.route('/api/upload', methods=['POST'])
 def upload():
     """Handle file upload and conversion"""
     session_id = uuid.uuid4().hex
@@ -297,30 +298,53 @@ def convert_documents(session_id: str, archive_path: str):
             progress_store[session_id]['status'] = 'failed'
             progress_store[session_id]['details'] = str(e)
 
-@app.route('/conversion-status/<session_id>')
-def conversion_status(session_id):
-    """Get conversion status"""
+@app.route('/api/status/<session_id>')
+def get_status(session_id):
+    """Get conversion and fine-tuning status"""
     if session_id not in progress_store:
         return jsonify(success=False, error='Session not found'), 404
     
     status = progress_store[session_id]
+    operation = status.get('operation', '')
     
-    # Get converted files count
-    convert_dir = os.path.join(CONVERT_ROOT, session_id)
-    files_count = 0
-    if os.path.exists(convert_dir):
-        files_count = len([f for f in os.listdir(convert_dir) if f.endswith('.md')])
-    
-    return jsonify({
+    response_data = {
         'success': True,
         'status': status['status'],
+        'operation': operation,
         'progress': status['progress'],
         'details': status['details'],
-        'files_converted': files_count,
         'elapsed_time': status.get('elapsed_time', 0)
-    })
+    }
+    
+    # Add download URL if available
+    if 'download_url' in status:
+        response_data['download_url'] = status['download_url']
+    
+    # Add additional processing info based on operation
+    if operation == "Document Conversion":
+        # Get converted files count
+        convert_dir = os.path.join(CONVERT_ROOT, session_id)
+        files_count = 0
+        if os.path.exists(convert_dir):
+            files_count = len([f for f in os.listdir(convert_dir) if f.endswith('.md')])
+        
+        response_data['processing'] = {
+            'status': status['status'],
+            'progress': status['progress'],
+            'message': status['details'],
+            'files_converted': files_count
+        }
+    elif operation == "Fine-tuning" or operation == "Model Download":
+        response_data['fine_tuning'] = {
+            'status': status['status'],
+            'progress': status['progress'],
+            'message': status['details'],
+            'download_path': status.get('download_url', '').replace('/api/download/', '')
+        }
+    
+    return jsonify(response_data)
 
-@app.route('/fine-tune', methods=['POST'])
+@app.route('/api/fine-tune', methods=['POST'])
 def fine_tune():
     """Start fine-tuning process"""
     try:
@@ -341,9 +365,9 @@ def fine_tune():
         if session_id not in progress_store or progress_store[session_id]['status'] != 'completed':
             return jsonify(success=False, error='Document conversion not completed'), 400
         
-        # Start fine-tuning in background
+        # Start model download and fine-tuning in background
         thread = threading.Thread(
-            target=run_fine_tuning,
+            target=download_and_fine_tune,
             args=(session_id, model_id)
         )
         thread.daemon = True
@@ -356,6 +380,62 @@ def fine_tune():
         traceback.print_exc()
         return jsonify(success=False, error=str(e)), 500
 
+def download_model(session_id: str, model_id: str) -> str:
+    """Download model from Hugging Face (background task)"""
+    try:
+        model_info = MODELS[model_id]
+        hf_model_id = model_info['model_id']
+        
+        # Create a unique model directory
+        model_dir = os.path.join(MODEL_ROOT, f"{model_id}_{session_id}")
+        os.makedirs(model_dir, exist_ok=True)
+        
+        # Create a progress tracker for download
+        tracker = ProgressTracker(session_id, 100, "Model Download")
+        tracker.update(5, f"Starting download of {model_info['name']}...")
+        
+        # Download tokenizer
+        tracker.update(10, "Downloading tokenizer...")
+        tokenizer = AutoTokenizer.from_pretrained(
+            hf_model_id,
+            trust_remote_code=True
+        )
+        
+        # Save tokenizer locally
+        tokenizer.save_pretrained(model_dir)
+        tracker.update(20, "Tokenizer downloaded successfully")
+        
+        # Download model with progress tracking
+        tracker.update(25, "Downloading model weights (this may take a while)...")
+        
+        # Use transformers to download the model
+        model = AutoModelForCausalLM.from_pretrained(
+            hf_model_id,
+            device_map="auto",
+            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+            trust_remote_code=True,
+            low_cpu_mem_usage=True
+        )
+        
+        # Save model locally
+        tracker.update(90, "Saving model to disk...")
+        model.save_pretrained(model_dir)
+        
+        tracker.update(100, f"Model {model_info['name']} downloaded successfully")
+        tracker.complete(True, "Model download complete")
+        
+        return model_dir
+        
+    except Exception as e:
+        logger.error(f"[{session_id}] Model download failed: {e}")
+        traceback.print_exc()
+        
+        if session_id in progress_store:
+            tracker = ProgressTracker(session_id, 100, "Model Download")
+            tracker.complete(False, f"Model download failed: {str(e)}")
+        
+        raise e
+
 # Progress callback for fine-tuning
 class ProgressCallback(TrainerCallback):
     def __init__(self, tracker, total_steps):
@@ -366,26 +446,42 @@ class ProgressCallback(TrainerCallback):
     
     def on_step_end(self, args, state, control, **kwargs):
         self.current_step = state.global_step
-        progress = 55 + (self.current_step / self.total_steps) * 35  # 55-90%
+        progress = 35 + (self.current_step / self.total_steps) * 55  # 35-90%
         self.tracker.update(
             int(progress),
             f"Training step {self.current_step}/{self.total_steps}"
         )
 
-def run_fine_tuning(session_id: str, model_id: str):
-    """Run fine-tuning process (background task)"""
+def download_and_fine_tune(session_id: str, model_id: str):
+    """Download model and then run fine-tuning process (background task)"""
+    try:
+        # First download the model
+        model_dir = download_model(session_id, model_id)
+        
+        # Now start fine-tuning
+        fine_tune_model(session_id, model_id, model_dir)
+        
+    except Exception as e:
+        logger.error(f"[{session_id}] Download and fine-tuning failed: {e}")
+        traceback.print_exc()
+        
+        if session_id in progress_store:
+            progress_store[session_id]['status'] = 'failed'
+            progress_store[session_id]['details'] = f"Process failed: {str(e)}"
+
+def fine_tune_model(session_id: str, model_id: str, model_dir: str):
+    """Run fine-tuning process using downloaded model"""
     try:
         tracker = ProgressTracker(session_id, 100, "Fine-tuning")
-        tracker.update(5, "Loading model and tokenizer...")
+        tracker.update(5, "Preparing for fine-tuning...")
         
         # Get model configuration
         model_config = MODELS[model_id]
-        model_path = os.path.join(BASE_DIR, model_config['local_path'])
         
-        logger.info(f"[{session_id}] Loading model from: {model_path}")
+        logger.info(f"[{session_id}] Loading model from: {model_dir}")
         
-        # Load tokenizer and model
-        tokenizer = AutoTokenizer.from_pretrained(model_path)
+        # Load tokenizer
+        tokenizer = AutoTokenizer.from_pretrained(model_dir)
         if tokenizer.pad_token is None:
             tokenizer.pad_token = tokenizer.eos_token
         
@@ -396,9 +492,10 @@ def run_fine_tuning(session_id: str, model_id: str):
         
         # Load model with attention implementation to avoid sliding window warning
         model = AutoModelForCausalLM.from_pretrained(
-            model_path,
+            model_dir,
             torch_dtype=torch.float16 if device == "cuda" else torch.float32,
             low_cpu_mem_usage=True,
+            trust_remote_code=True,
             attn_implementation="eager",  # Use eager attention to avoid sliding window warning
         )
         
@@ -415,7 +512,7 @@ def run_fine_tuning(session_id: str, model_id: str):
             r=8,
             lora_alpha=32,
             lora_dropout=0.1,
-            target_modules=["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]  # Common target modules for Qwen
+            target_modules=["q_proj", "v_proj", "k_proj", "o_proj", "gate_proj", "up_proj", "down_proj"]
         )
         
         model = get_peft_model(model, peft_config)
@@ -529,17 +626,14 @@ def run_fine_tuning(session_id: str, model_id: str):
             model=model,
             args=training_args,
             train_dataset=tokenized_dataset,
-            processing_class=tokenizer,  # Use processing_class instead of tokenizer
             data_collator=data_collator,
+            callbacks=[progress_callback],
         )
-        
-        # Add progress callback
-        trainer.add_callback(progress_callback)
         
         # Train model
         trainer.train()
         
-        tracker.update(90, "Saving model...")
+        tracker.update(90, "Saving fine-tuned model...")
         
         # Save model and tokenizer
         model.save_pretrained(output_dir)
@@ -550,6 +644,7 @@ def run_fine_tuning(session_id: str, model_id: str):
             'session_id': session_id,
             'model_id': model_id,
             'base_model': model_config['name'],
+            'huggingface_id': model_config['model_id'],
             'training_steps': total_steps,
             'documents_used': len(texts),
             'timestamp': datetime.now().isoformat()
@@ -561,13 +656,22 @@ def run_fine_tuning(session_id: str, model_id: str):
         tracker.update(95, "Creating download archive...")
         
         # Create ZIP archive
-        zip_path = shutil.make_archive(output_dir, 'zip', output_dir)
-        zip_filename = os.path.basename(zip_path)
+        zip_filename = f"tuned_{model_id}_{output_id}.zip"
+        zip_path = os.path.join(OUTPUT_ROOT, zip_filename)
+        shutil.make_archive(os.path.splitext(zip_path)[0], 'zip', output_dir)
+        
+        # Cleanup the base model directory to save space
+        tracker.update(98, "Cleaning up base model...")
+        try:
+            shutil.rmtree(model_dir)
+            logger.info(f"[{session_id}] Removed base model directory: {model_dir}")
+        except Exception as e:
+            logger.warning(f"[{session_id}] Failed to remove base model directory: {e}")
         
         tracker.complete(True, f"Fine-tuning completed! Archive: {zip_filename}")
         
         # Store download info
-        progress_store[session_id]['download_url'] = f'/download/{zip_filename}'
+        progress_store[session_id]['download_url'] = f'/api/download/{zip_filename}'
         
         logger.info(f"[{session_id}] Fine-tuning completed successfully")
         
@@ -576,24 +680,16 @@ def run_fine_tuning(session_id: str, model_id: str):
         traceback.print_exc()
         if session_id in progress_store:
             tracker.complete(False, f"Fine-tuning failed: {str(e)}")
+        
+        # Clean up model directory on failure
+        try:
+            if os.path.exists(model_dir):
+                shutil.rmtree(model_dir)
+                logger.info(f"[{session_id}] Cleaned up model directory after failure: {model_dir}")
+        except Exception as cleanup_err:
+            logger.warning(f"[{session_id}] Failed to clean up model directory: {cleanup_err}")
 
-@app.route('/fine-tune-status/<session_id>')
-def fine_tune_status(session_id):
-    """Get fine-tuning status"""
-    if session_id not in progress_store:
-        return jsonify(success=False, error='Session not found'), 404
-    
-    status = progress_store[session_id]
-    return jsonify({
-        'success': True,
-        'status': status['status'],
-        'progress': status['progress'],
-        'details': status['details'],
-        'download_url': status.get('download_url'),
-        'elapsed_time': status.get('elapsed_time', 0)
-    })
-
-@app.route('/download/<path:filename>')
+@app.route('/api/download/<path:filename>')
 def download_file(filename):
     """Download fine-tuned model"""
     file_path = os.path.join(OUTPUT_ROOT, filename)

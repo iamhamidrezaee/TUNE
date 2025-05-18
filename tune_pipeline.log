@@ -1,101 +1,144 @@
-2025-05-16 23:01:37,288 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
-2025-05-16 23:01:37,290 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
-2025-05-16 23:01:37,290 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
-2025-05-16 23:01:37,344 - INFO - Loaded 1 models from config
-2025-05-16 23:01:37,377 - INFO - Document converter initialized
-2025-05-16 23:01:37,412 - INFO - Starting LLM Fine-tuning Pipeline Server
-2025-05-16 23:01:37,412 - INFO - Server running on http://localhost:8000
-2025-05-16 23:01:37,592 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+2025-05-18 15:14:05,267 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:14:05,267 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:14:05,267 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:14:05,267 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:14:05,307 - INFO - Loaded 10 models from config
+2025-05-18 15:14:05,315 - INFO - Document converter initialized
+2025-05-18 15:14:05,317 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:14:05,324 - INFO - Server running on http://localhost:8000
+2025-05-18 15:14:05,375 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on all addresses (0.0.0.0)
  * Running on http://127.0.0.1:8000
- * Running on http://10.48.58.129:8000
-2025-05-16 23:01:37,592 - INFO - [33mPress CTRL+C to quit[0m
-2025-05-16 23:01:37,614 - INFO -  * Restarting with stat
-2025-05-16 23:02:58,747 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
-2025-05-16 23:02:58,758 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
-2025-05-16 23:02:58,758 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
-2025-05-16 23:02:58,774 - INFO - Loaded 1 models from config
-2025-05-16 23:02:58,815 - INFO - Document converter initialized
-2025-05-16 23:02:58,845 - INFO - Starting LLM Fine-tuning Pipeline Server
-2025-05-16 23:02:58,845 - INFO - Server running on http://localhost:8000
-2025-05-16 23:02:58,921 - WARNING -  * Debugger is active!
-2025-05-16 23:02:58,997 - INFO -  * Debugger PIN: 102-550-187
-2025-05-16 23:09:05,037 - INFO - 127.0.0.1 - - [16/May/2025 23:09:05] "GET / HTTP/1.1" 200 -
-2025-05-16 23:09:05,165 - INFO - 127.0.0.1 - - [16/May/2025 23:09:05] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:09:05,235 - INFO - 127.0.0.1 - - [16/May/2025 23:09:05] "GET /style/images/Tune_logo.png HTTP/1.1" 200 -
-2025-05-16 23:09:05,317 - INFO - 127.0.0.1 - - [16/May/2025 23:09:05] "GET /js/main.js HTTP/1.1" 200 -
-2025-05-16 23:09:05,571 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:09:05,576 - INFO - 127.0.0.1 - - [16/May/2025 23:09:05] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:09:06,485 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:09:06,495 - INFO - 127.0.0.1 - - [16/May/2025 23:09:06] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
-2025-05-16 23:10:17,824 - INFO - 127.0.0.1 - - [16/May/2025 23:10:17] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
-2025-05-16 23:10:17,957 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:10:17,959 - INFO - 127.0.0.1 - - [16/May/2025 23:10:17] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
-2025-05-16 23:10:35,381 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "GET / HTTP/1.1" 200 -
-2025-05-16 23:10:35,504 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:10:35,506 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
-2025-05-16 23:10:35,526 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:10:35,531 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:10:35,537 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:10:35,629 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:10:35,629 - INFO - 127.0.0.1 - - [16/May/2025 23:10:35] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:10:43,792 - INFO - 127.0.0.1 - - [16/May/2025 23:10:43] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:10:43,868 - INFO - 127.0.0.1 - - [16/May/2025 23:10:43] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:10:43,870 - INFO - 127.0.0.1 - - [16/May/2025 23:10:43] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:10:43,884 - INFO - 127.0.0.1 - - [16/May/2025 23:10:43] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:10:43,904 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:10:43,904 - INFO - 127.0.0.1 - - [16/May/2025 23:10:43] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:11:27,637 - INFO - 127.0.0.1 - - [16/May/2025 23:11:27] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:11:27,755 - INFO - 127.0.0.1 - - [16/May/2025 23:11:27] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:11:27,757 - INFO - 127.0.0.1 - - [16/May/2025 23:11:27] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:11:27,759 - INFO - 127.0.0.1 - - [16/May/2025 23:11:27] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:11:27,799 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:11:27,803 - INFO - 127.0.0.1 - - [16/May/2025 23:11:27] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:12:04,955 - INFO - 127.0.0.1 - - [16/May/2025 23:12:04] "GET / HTTP/1.1" 200 -
-2025-05-16 23:12:05,067 - INFO - 127.0.0.1 - - [16/May/2025 23:12:05] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
-2025-05-16 23:12:05,070 - INFO - 127.0.0.1 - - [16/May/2025 23:12:05] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:12:05,070 - INFO - 127.0.0.1 - - [16/May/2025 23:12:05] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:12:05,103 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:12:05,103 - INFO - 127.0.0.1 - - [16/May/2025 23:12:05] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:12:39,267 - INFO - 127.0.0.1 - - [16/May/2025 23:12:39] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:12:39,374 - INFO - 127.0.0.1 - - [16/May/2025 23:12:39] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:12:39,376 - INFO - 127.0.0.1 - - [16/May/2025 23:12:39] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:12:39,384 - INFO - 127.0.0.1 - - [16/May/2025 23:12:39] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:12:39,401 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:12:39,401 - INFO - 127.0.0.1 - - [16/May/2025 23:12:39] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:12:46,297 - INFO - 127.0.0.1 - - [16/May/2025 23:12:46] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:12:46,387 - INFO - 127.0.0.1 - - [16/May/2025 23:12:46] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:12:46,387 - INFO - 127.0.0.1 - - [16/May/2025 23:12:46] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:12:46,424 - INFO - 127.0.0.1 - - [16/May/2025 23:12:46] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:12:46,445 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:12:46,445 - INFO - 127.0.0.1 - - [16/May/2025 23:12:46] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:12:55,007 - INFO - 127.0.0.1 - - [16/May/2025 23:12:55] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:12:55,115 - INFO - 127.0.0.1 - - [16/May/2025 23:12:55] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:12:55,115 - INFO - 127.0.0.1 - - [16/May/2025 23:12:55] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:12:55,147 - INFO - 127.0.0.1 - - [16/May/2025 23:12:55] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:12:55,186 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:12:55,192 - INFO - 127.0.0.1 - - [16/May/2025 23:12:55] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:15:06,082 - INFO - 127.0.0.1 - - [16/May/2025 23:15:06] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:15:06,189 - INFO - 127.0.0.1 - - [16/May/2025 23:15:06] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
-2025-05-16 23:15:06,202 - INFO - 127.0.0.1 - - [16/May/2025 23:15:06] "GET /style/images/Tune_logo.png HTTP/1.1" 200 -
-2025-05-16 23:15:06,211 - INFO - 127.0.0.1 - - [16/May/2025 23:15:06] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:15:06,234 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:15:06,238 - INFO - 127.0.0.1 - - [16/May/2025 23:15:06] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:17:15,854 - INFO - 127.0.0.1 - - [16/May/2025 23:17:15] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:17:15,942 - INFO - 127.0.0.1 - - [16/May/2025 23:17:15] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
-2025-05-16 23:17:15,957 - INFO - 127.0.0.1 - - [16/May/2025 23:17:15] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:17:15,997 - INFO - 127.0.0.1 - - [16/May/2025 23:17:15] "GET /style/images/Tune_logo.png HTTP/1.1" 200 -
-2025-05-16 23:17:16,002 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:17:16,002 - INFO - 127.0.0.1 - - [16/May/2025 23:17:16] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:18:12,926 - INFO - 127.0.0.1 - - [16/May/2025 23:18:12] "[36mGET / HTTP/1.1[0m" 304 -
-2025-05-16 23:18:13,016 - INFO - 127.0.0.1 - - [16/May/2025 23:18:13] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:18:13,021 - INFO - 127.0.0.1 - - [16/May/2025 23:18:13] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:18:13,039 - INFO - 127.0.0.1 - - [16/May/2025 23:18:13] "GET /style/styles.css HTTP/1.1" 200 -
-2025-05-16 23:18:13,054 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:18:13,056 - INFO - 127.0.0.1 - - [16/May/2025 23:18:13] "[33mGET /api/models HTTP/1.1[0m" 404 -
-2025-05-16 23:18:27,630 - INFO - 127.0.0.1 - - [16/May/2025 23:18:27] "GET / HTTP/1.1" 200 -
-2025-05-16 23:18:27,735 - INFO - 127.0.0.1 - - [16/May/2025 23:18:27] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
-2025-05-16 23:18:27,735 - INFO - 127.0.0.1 - - [16/May/2025 23:18:27] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
-2025-05-16 23:18:27,748 - INFO - 127.0.0.1 - - [16/May/2025 23:18:27] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
-2025-05-16 23:18:27,772 - ERROR - Not found: 404 Not Found: The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.
-2025-05-16 23:18:27,772 - INFO - 127.0.0.1 - - [16/May/2025 23:18:27] "[33mGET /api/models HTTP/1.1[0m" 404 -
+ * Running on http://10.48.104.8:8000
+2025-05-18 15:14:05,375 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-18 15:14:05,391 - INFO -  * Restarting with stat
+2025-05-18 15:14:30,155 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:14:30,158 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:14:30,158 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:14:30,158 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:14:30,158 - INFO - Loaded 10 models from config
+2025-05-18 15:14:30,163 - INFO - Document converter initialized
+2025-05-18 15:14:30,163 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:14:30,163 - INFO - Server running on http://localhost:8000
+2025-05-18 15:14:30,180 - WARNING -  * Debugger is active!
+2025-05-18 15:14:30,196 - INFO -  * Debugger PIN: 102-550-187
+2025-05-18 15:14:30,254 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET / HTTP/1.1" 200 -
+2025-05-18 15:14:30,313 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET /style/styles.css HTTP/1.1" 200 -
+2025-05-18 15:14:30,322 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET /style/images/Tune_logo.png HTTP/1.1" 200 -
+2025-05-18 15:14:30,461 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET /js/main.js HTTP/1.1" 200 -
+2025-05-18 15:14:30,529 - INFO - Fetching available models
+2025-05-18 15:14:30,529 - INFO - Returning 10 models
+2025-05-18 15:14:30,533 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET /api/models HTTP/1.1" 200 -
+2025-05-18 15:14:30,869 - INFO - 127.0.0.1 - - [18/May/2025 15:14:30] "GET /style/images/favicon.png HTTP/1.1" 200 -
+2025-05-18 15:14:46,803 - INFO - [0f57063fc17347778282bf4030eee985] Starting upload process
+2025-05-18 15:14:46,843 - INFO - [0f57063fc17347778282bf4030eee985] Saved file: C:\Users\hamed\Desktop\tune\misc\uploads\0f57063fc17347778282bf4030eee985\test_folder.zip
+2025-05-18 15:14:46,854 - INFO - 127.0.0.1 - - [18/May/2025 15:14:46] "POST /api/upload HTTP/1.1" 200 -
+2025-05-18 15:14:46,863 - INFO - [0f57063fc17347778282bf4030eee985] Document Conversion: 5.0% - Extracting archive...
+2025-05-18 15:14:46,866 - INFO - Extracting archive: C:\Users\hamed\Desktop\tune\misc\uploads\0f57063fc17347778282bf4030eee985\test_folder.zip
+2025-05-18 15:14:46,884 - INFO - 127.0.0.1 - - [18/May/2025 15:14:46] "GET /api/progress/0f57063fc17347778282bf4030eee985 HTTP/1.1" 200 -
+2025-05-18 15:14:46,975 - INFO - Detected ZIP format
+2025-05-18 15:14:47,030 - INFO - [0f57063fc17347778282bf4030eee985] Found 1 files to convert
+2025-05-18 15:14:47,036 - INFO - [0f57063fc17347778282bf4030eee985] Document Conversion: 10.0% - Converting: test_folder\On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf
+2025-05-18 15:14:48,983 - INFO - Going to convert document batch...
+2025-05-18 15:14:48,994 - INFO - Initializing pipeline for StandardPdfPipeline with options hash 70041f74270850b7bedf7c8f5c2dcede
+2025-05-18 15:14:49,625 - INFO - Loading plugin 'docling_defaults'
+2025-05-18 15:14:49,629 - INFO - Registered ocr engines: ['easyocr', 'ocrmac', 'rapidocr', 'tesserocr', 'tesseract']
+2025-05-18 15:14:51,149 - INFO - Accelerator device: 'cpu'
+2025-05-18 15:15:07,695 - INFO - Accelerator device: 'cpu'
+2025-05-18 15:15:09,193 - INFO - Accelerator device: 'cpu'
+2025-05-18 15:15:10,316 - INFO - Loading plugin 'docling_defaults'
+2025-05-18 15:15:10,316 - INFO - Registered picture descriptions: ['vlm', 'api']
+2025-05-18 15:15:10,316 - INFO - Processing document On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf
+2025-05-18 15:16:31,428 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "[36mGET / HTTP/1.1[0m" 304 -
+2025-05-18 15:16:31,513 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
+2025-05-18 15:16:31,536 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:16:31,619 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "GET /js/main.js HTTP/1.1" 200 -
+2025-05-18 15:16:31,650 - INFO - Fetching available models
+2025-05-18 15:16:31,650 - INFO - Returning 10 models
+2025-05-18 15:16:31,650 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "GET /api/models HTTP/1.1" 200 -
+2025-05-18 15:16:31,813 - INFO - 127.0.0.1 - - [18/May/2025 15:16:31] "[36mGET /style/images/favicon.png HTTP/1.1[0m" 304 -
+2025-05-18 15:16:38,019 - INFO - [680437d761de483b985233160cd7f04a] Starting upload process
+2025-05-18 15:16:38,463 - INFO - [680437d761de483b985233160cd7f04a] Saved file: C:\Users\hamed\Desktop\tune\misc\uploads\680437d761de483b985233160cd7f04a\test_folder.zip
+2025-05-18 15:16:38,512 - INFO - 127.0.0.1 - - [18/May/2025 15:16:38] "POST /api/upload HTTP/1.1" 200 -
+2025-05-18 15:16:38,557 - INFO - [680437d761de483b985233160cd7f04a] Document Conversion: 5.0% - Extracting archive...
+2025-05-18 15:16:38,597 - INFO - Extracting archive: C:\Users\hamed\Desktop\tune\misc\uploads\680437d761de483b985233160cd7f04a\test_folder.zip
+2025-05-18 15:16:38,637 - INFO - 127.0.0.1 - - [18/May/2025 15:16:38] "GET /api/progress/680437d761de483b985233160cd7f04a HTTP/1.1" 200 -
+2025-05-18 15:16:38,874 - INFO - Detected ZIP format
+2025-05-18 15:16:38,927 - INFO - [680437d761de483b985233160cd7f04a] Found 1 files to convert
+2025-05-18 15:16:38,935 - INFO - [680437d761de483b985233160cd7f04a] Document Conversion: 10.0% - Converting: test_folder\On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf
+2025-05-18 15:17:04,927 - INFO - Going to convert document batch...
+2025-05-18 15:17:04,927 - INFO - Processing document On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf
+2025-05-18 15:19:59,624 - INFO - Finished converting document On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf in 312.59 sec.
+2025-05-18 15:19:59,966 - INFO - [0f57063fc17347778282bf4030eee985] Converted: test_folder\On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf
+2025-05-18 15:19:59,966 - INFO - [0f57063fc17347778282bf4030eee985] Document Conversion: 100.0% - Conversion complete: 1 successful, 0 failed
+2025-05-18 15:20:01,088 - INFO - [0f57063fc17347778282bf4030eee985] Document Conversion completed: Successfully converted 1 documents
+2025-05-18 15:20:38,713 - INFO - 127.0.0.1 - - [18/May/2025 15:20:38] "[36mGET / HTTP/1.1[0m" 304 -
+2025-05-18 15:20:38,988 - INFO - 127.0.0.1 - - [18/May/2025 15:20:38] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:20:38,988 - INFO - 127.0.0.1 - - [18/May/2025 15:20:38] "GET /style/styles.css HTTP/1.1" 200 -
+2025-05-18 15:20:38,988 - INFO - 127.0.0.1 - - [18/May/2025 15:20:38] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2025-05-18 15:20:39,134 - INFO - Fetching available models
+2025-05-18 15:20:39,160 - INFO - Returning 10 models
+2025-05-18 15:20:39,177 - INFO - 127.0.0.1 - - [18/May/2025 15:20:39] "GET /api/models HTTP/1.1" 200 -
+2025-05-18 15:20:40,125 - INFO - 127.0.0.1 - - [18/May/2025 15:20:40] "[36mGET /style/images/favicon.png HTTP/1.1[0m" 304 -
+2025-05-18 15:21:24,526 - INFO - Finished converting document On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf in 285.58 sec.
+2025-05-18 15:21:24,662 - WARNING - [680437d761de483b985233160cd7f04a] Failed to convert test_folder\On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.pdf: [Errno 2] No such file or directory: 'C:\\Users\\hamed\\Desktop\\tune\\misc\\converted\\680437d761de483b985233160cd7f04a\\On the Dangers of Stochastic Parrots - Can Language Models Be Too Big.md'
+2025-05-18 15:21:24,662 - INFO - [680437d761de483b985233160cd7f04a] Document Conversion: 100.0% - Conversion complete: 0 successful, 1 failed
+2025-05-18 15:21:25,669 - INFO - [680437d761de483b985233160cd7f04a] Document Conversion completed: Successfully converted 0 documents
+2025-05-18 15:33:39,439 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:33:39,439 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:33:39,439 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:33:39,439 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:33:39,447 - INFO - Loaded 10 models from config
+2025-05-18 15:33:39,459 - INFO - Document converter initialized
+2025-05-18 15:33:39,468 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:33:39,468 - INFO - Server running on http://localhost:8000
+2025-05-18 15:33:39,542 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.48.104.8:8000
+2025-05-18 15:33:39,542 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-18 15:33:39,545 - INFO -  * Restarting with stat
+2025-05-18 15:34:32,196 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:34:32,196 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:34:32,196 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:34:32,196 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:34:32,196 - INFO - Loaded 10 models from config
+2025-05-18 15:34:32,196 - INFO - Document converter initialized
+2025-05-18 15:34:32,211 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:34:32,211 - INFO - Server running on http://localhost:8000
+2025-05-18 15:34:32,236 - WARNING -  * Debugger is active!
+2025-05-18 15:34:32,250 - INFO -  * Debugger PIN: 102-550-187
+2025-05-18 15:34:32,384 - INFO - 127.0.0.1 - - [18/May/2025 15:34:32] "GET / HTTP/1.1" 200 -
+2025-05-18 15:34:32,449 - INFO - 127.0.0.1 - - [18/May/2025 15:34:32] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:34:32,467 - INFO - 127.0.0.1 - - [18/May/2025 15:34:32] "GET /style/styles.css HTTP/1.1" 200 -
+2025-05-18 15:34:32,516 - INFO - 127.0.0.1 - - [18/May/2025 15:34:32] "GET /js/main.js HTTP/1.1" 200 -
+2025-05-18 15:44:11,446 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:44:11,448 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:44:11,448 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:44:11,450 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:44:11,450 - INFO - Loaded 10 models from config
+2025-05-18 15:44:11,457 - INFO - Document converter initialized
+2025-05-18 15:44:11,466 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:44:11,466 - INFO - Server running on http://localhost:8000
+2025-05-18 15:44:11,507 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.48.104.8:8000
+2025-05-18 15:44:11,511 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-18 15:44:11,515 - INFO -  * Restarting with stat
+2025-05-18 15:44:47,183 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:44:47,183 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:44:47,183 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:44:47,183 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:44:47,187 - INFO - Loaded 10 models from config
+2025-05-18 15:44:47,224 - INFO - Document converter initialized
+2025-05-18 15:44:47,271 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:44:47,273 - INFO - Server running on http://localhost:8000
+2025-05-18 15:44:47,388 - WARNING -  * Debugger is active!
+2025-05-18 15:44:47,500 - INFO -  * Debugger PIN: 102-550-187
+2025-05-18 15:44:47,724 - INFO - 127.0.0.1 - - [18/May/2025 15:44:47] "GET / HTTP/1.1" 200 -
+2025-05-18 15:44:47,811 - INFO - 127.0.0.1 - - [18/May/2025 15:44:47] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:44:47,816 - INFO - 127.0.0.1 - - [18/May/2025 15:44:47] "GET /style/styles.css HTTP/1.1" 200 -
+2025-05-18 15:44:47,877 - INFO - 127.0.0.1 - - [18/May/2025 15:44:47] "GET /js/main.js HTTP/1.1" 200 -
+2025-05-18 15:45:48,303 - INFO -  * Detected change in 'C:\\Users\\hamed\\Desktop\\tune\\app.py', reloading
+2025-05-18 15:45:51,710 - INFO -  * Restarting with stat

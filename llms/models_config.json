@@ -1,0 +1,72 @@
+{
+    "mistral-7b-instruct": {
+      "name": "Mistral-7B-Instruct-v0.2",
+      "model_id": "mistralai/Mistral-7B-Instruct-v0.2",
+      "size": "7B",
+      "family": "Mistral",
+      "description": "Improved instruction-tuned Mistral model with enhanced chat capabilities and direct preference optimization"
+    },
+    "qwen2-14b-instruct": {
+      "name": "Qwen2.5-14B-Instruct",
+      "model_id": "Qwen/Qwen2.5-14B-Instruct",
+      "size": "14B",
+      "family": "Qwen",
+      "description": "Instruction-tuned Qwen2.5 model with long-context support and improved structured output capabilities"
+    },
+    "qwen2-7b-instruct": {
+      "name": "Qwen2.5-7B-Instruct",
+      "model_id": "Qwen/Qwen2.5-7B-Instruct",
+      "size": "7B",
+      "family": "Qwen",
+      "description": "7B variant of Qwen2.5 fine-tuned for instruction following and chat"
+    },
+    "qwen2-3b-instruct": {
+      "name": "Qwen2.5-3B-Instruct",
+      "model_id": "Qwen/Qwen2.5-3B-Instruct",
+      "size": "3B",
+      "family": "Qwen",
+      "description": "Compact 3B Qwen2.5 model fine-tuned for conversational tasks and long-context scenarios"
+    },
+    "mpt-7b-instruct": {
+      "name": "MPT-7B-Instruct",
+      "model_id": "mosaicml/mpt-7b-instruct",
+      "size": "7B",
+      "family": "MPT",
+      "description": "Instruction-following variant of MPT-7B trained on diverse instruction datasets"
+    },
+    "smollm2-1.7b-instruct": {
+      "name": "SmolLM2-1.7B-Instruct",
+      "model_id": "HuggingFaceTB/SmolLM2-1.7B-Instruct",
+      "size": "1.7B",
+      "family": "SmolLM",
+      "description": "Data-centric compact LLM optimized for instruction following, reasoning, and function calling"
+    },
+    "olmo2-1b-instruct": {
+      "name": "OLMo 2-0425-1B-Instruct",
+      "model_id": "allenai/OLMo-2-0425-1B-Instruct",
+      "size": "1B",
+      "family": "OLMo 2",
+      "description": "Compact instruct variant designed for chat applications with SFT finetuning"
+    },
+    "olmo2-7b-instruct": {
+      "name": "OLMo 2-1124-7B-Instruct",
+      "model_id": "allenai/OLMo-2-1124-7B-Instruct",
+      "size": "7B",
+      "family": "OLMo 2",
+      "description": "High-performance 7B instruct model from the OLMo 2 series, optimized for conversational tasks"
+    },
+    "olmo2-13b-instruct": {
+      "name": "OLMo 2-1124-13B-Instruct",
+      "model_id": "allenai/OLMo-2-1124-13B-Instruct",
+      "size": "13B",
+      "family": "OLMo 2",
+      "description": "Advanced 13B instruct model with SFT for robust chat performance"
+    },
+    "platypus2-13b": {
+      "name": "Platypus2-13B",
+      "model_id": "garage-bAInd/Platypus2-13B",
+      "size": "13B",
+      "family": "Platypus",
+      "description": "Instruction fine-tuned LLaMA2-13B model specialized in STEM and logic tasks"
+    }
+  }

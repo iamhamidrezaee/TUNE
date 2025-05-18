@@ -7,6 +7,7 @@ const modelInfo = document.getElementById('modelInfo');
 const fineTuneBtn = document.getElementById('fineTuneBtn');
 const statusMessages = document.getElementById('statusMessages');
 const loadingOverlay = document.getElementById('loadingOverlay');
+
 // Progress elements
 const uploadProgress = document.getElementById('uploadProgress');
 const uploadProgressFill = document.getElementById('uploadProgressFill');
@@ -14,14 +15,17 @@ const uploadDetails = document.getElementById('uploadDetails');
 const fineTuneProgress = document.getElementById('fineTuneProgress');
 const fineTuneProgressFill = document.getElementById('fineTuneProgressFill');
 const fineTuneDetails = document.getElementById('fineTuneDetails');
+
 // Results elements
 const resultsCard = document.getElementById('resultsCard');
 const successMessage = document.getElementById('successMessage');
 const downloadBtn = document.getElementById('downloadBtn');
+
 // Step cards
 const step1 = document.querySelector('#step1');
 const step2 = document.getElementById('step2');
 const step3 = document.getElementById('step3');
+
 // Wave elements
 const waveContainer = document.querySelector('.wave-container');
 const waves = document.querySelectorAll('.wave');
@@ -31,6 +35,7 @@ const wavePaths = document.querySelectorAll('.wave-path, .wave-path-2');
 let sessionId = null;
 let selectedModelInfo = null;
 let mouseMoveTimeout = null;
+let progressEventSource = null;
 
 // Initialize the application
 initializeApp();
@@ -204,8 +209,12 @@ function handleFileSelect() {
 
 async function loadModels() {
     try {
+        showLoadingOverlay('Loading available models...');
+        
         const response = await fetch('/api/models');
         const data = await response.json();
+        
+        hideLoadingOverlay();
         
         if (data.success) {
             populateModelSelect(data.models);
@@ -215,6 +224,7 @@ async function loadModels() {
     } catch (error) {
         console.error('Failed to load models:', error);
         showStatusMessage('Failed to load models. Please refresh the page.', 'error');
+        hideLoadingOverlay();
     }
 }
 
@@ -230,9 +240,11 @@ function populateModelSelect(models) {
             option.dataset.modelData = JSON.stringify(model);
             modelSelect.appendChild(option);
         });
+        
+        showStatusMessage(`Loaded ${models.length} available models`, 'success');
     } else {
         modelSelect.innerHTML = '<option value="">No models available</option>';
-        showStatusMessage('No models found. Please run llm_saver.py first.', 'error');
+        showStatusMessage('No models found in configuration.', 'error');
     }
 }
 
@@ -290,19 +302,55 @@ async function uploadFile() {
         
         // Show progress and start monitoring
         uploadProgress.style.display = 'block';
-        await monitorProcessing(sessionId);
+        
+        // Setup SSE for real-time progress updates
+        setupProgressEventSource(sessionId);
         
     } catch (error) {
         console.error('Upload failed:', error);
         showStatusMessage(`Upload failed: ${error.message}`, 'error');
         uploadBtn.disabled = false;
-    } finally {
         hideLoadingOverlay();
     }
 }
 
-async function monitorProcessing(sessionId) {
-    // Poll status to monitor processing
+function setupProgressEventSource(sessionId) {
+    // Close existing event source if any
+    if (progressEventSource) {
+        progressEventSource.close();
+    }
+    
+    // Create new event source
+    progressEventSource = new EventSource(`/api/progress/${sessionId}`);
+    
+    progressEventSource.onmessage = function(event) {
+        const data = JSON.parse(event.data);
+        
+        // Update UI based on operation type
+        if (data.operation === "Document Conversion") {
+            handleDocumentConversionProgress(data);
+        } else if (data.operation === "Model Download") {
+            handleModelDownloadProgress(data);
+        } else if (data.operation === "Fine-tuning") {
+            handleFineTuningProgress(data);
+        }
+        
+        // Close event source if process is complete
+        if (data.status === 'completed' || data.status === 'failed') {
+            progressEventSource.close();
+        }
+    };
+    
+    progressEventSource.onerror = function() {
+        console.error('SSE connection error');
+        progressEventSource.close();
+        
+        // Fallback to polling if SSE fails
+        pollProgressStatus(sessionId);
+    };
+}
+
+function pollProgressStatus(sessionId) {
     const checkStatus = async () => {
         try {
             const response = await fetch(`/api/status/${sessionId}`);
@@ -312,33 +360,18 @@ async function monitorProcessing(sessionId) {
                 throw new Error(data.error || 'Status check failed');
             }
             
-            const processingStatus = data.processing;
-            
-            // Update progress UI
-            if (processingStatus) {
-                // Simulate progress if exact progress not available
-                const progress = processingStatus.progress || (
-                    processingStatus.status === 'completed' ? 100 : 
-                    processingStatus.status === 'processing' ? 50 : 0
-                );
-                
-                uploadProgressFill.style.width = `${progress}%`;
-                uploadDetails.textContent = processingStatus.message || 'Processing...';
-                
-                if (processingStatus.status === 'completed') {
-                    // Processing complete
-                    handleProcessingComplete(sessionId);
-                    return true;
-                } else if (processingStatus.status === 'error') {
-                    // Processing failed
-                    showStatusMessage(`Processing failed: ${processingStatus.message}`, 'error');
-                    uploadProgress.style.display = 'none';
-                    uploadBtn.disabled = false;
-                    return true;
-                }
+            // Update UI based on operation type
+            if (data.operation === "Document Conversion") {
+                handleDocumentConversionProgress(data);
+            } else if (data.operation === "Model Download") {
+                handleModelDownloadProgress(data);
+            } else if (data.operation === "Fine-tuning") {
+                handleFineTuningProgress(data);
             }
             
-            return false;
+            // Return true if process is complete
+            return data.status === 'completed' || data.status === 'failed';
+            
         } catch (error) {
             console.error('Status check failed:', error);
             return false;
@@ -346,29 +379,84 @@ async function monitorProcessing(sessionId) {
     };
     
     // Initial check
-    if (await checkStatus()) return;
-    
-    // Continue polling
-    const interval = setInterval(async () => {
-        if (await checkStatus()) {
-            clearInterval(interval);
+    checkStatus().then(isDone => {
+        if (!isDone) {
+            // Continue polling if not done
+            const interval = setInterval(async () => {
+                const isDone = await checkStatus();
+                if (isDone) {
+                    clearInterval(interval);
+                }
+            }, 2000);
         }
-    }, 2000);
+    });
 }
 
-function handleProcessingComplete(sessionId) {
-    // Mark step 1 as completed
-    step1.classList.remove('active');
-    step1.classList.add('completed');
+function handleDocumentConversionProgress(data) {
+    // Update progress UI
+    uploadProgressFill.style.width = `${data.progress}%`;
+    uploadDetails.textContent = data.details || 'Processing...';
     
-    // Activate step 2
-    step2.classList.add('active');
+    // When complete
+    if (data.status === 'completed') {
+        // Mark step 1 as completed
+        step1.classList.remove('active');
+        step1.classList.add('completed');
+        
+        // Activate step 2
+        step2.classList.add('active');
+        
+        // Enable model selection
+        modelSelect.disabled = false;
+        
+        showStatusMessage('Document processing completed successfully!', 'success');
+        uploadProgress.style.display = 'none';
+        hideLoadingOverlay();
+    } 
+    // When failed
+    else if (data.status === 'failed') {
+        showStatusMessage(`Processing failed: ${data.details}`, 'error');
+        uploadProgress.style.display = 'none';
+        uploadBtn.disabled = false;
+        hideLoadingOverlay();
+    }
+}
+
+function handleModelDownloadProgress(data) {
+    // Show fine-tune progress section
+    fineTuneProgress.style.display = 'block';
     
-    // Enable model selection
-    modelSelect.disabled = false;
+    // Update progress UI
+    fineTuneProgressFill.style.width = `${data.progress}%`;
+    fineTuneDetails.textContent = data.details || 'Downloading model...';
     
-    showStatusMessage('Document processing completed successfully!', 'success');
-    uploadProgress.style.display = 'none';
+    // When failed
+    if (data.status === 'failed') {
+        showStatusMessage(`Model download failed: ${data.details}`, 'error');
+        fineTuneBtn.disabled = false;
+        hideLoadingOverlay();
+    }
+}
+
+function handleFineTuningProgress(data) {
+    // Show fine-tune progress section
+    fineTuneProgress.style.display = 'block';
+    
+    // Update progress UI
+    fineTuneProgressFill.style.width = `${data.progress}%`;
+    fineTuneDetails.textContent = data.details || 'Fine-tuning in progress...';
+    
+    // When complete
+    if (data.status === 'completed') {
+        handleFineTuningComplete(data);
+    } 
+    // When failed
+    else if (data.status === 'failed') {
+        showStatusMessage(`Fine-tuning failed: ${data.details}`, 'error');
+        fineTuneProgress.style.display = 'none';
+        fineTuneBtn.disabled = false;
+        hideLoadingOverlay();
+    }
 }
 
 async function startFineTuning() {
@@ -403,78 +491,22 @@ async function startFineTuning() {
         step2.classList.add('completed');
         step3.classList.add('active');
         
-        showStatusMessage('Fine-tuning started!', 'success');
+        showStatusMessage('Fine-tuning process started!', 'success');
         
         // Show progress and start monitoring
         fineTuneProgress.style.display = 'block';
-        await monitorFineTuning(sessionId);
+        
+        // We're already monitoring progress with SSE from the upload step
         
     } catch (error) {
         console.error('Fine-tuning failed:', error);
         showStatusMessage(`Fine-tuning failed: ${error.message}`, 'error');
         fineTuneBtn.disabled = false;
-    } finally {
         hideLoadingOverlay();
     }
 }
 
-async function monitorFineTuning(sessionId) {
-    // Poll status to monitor fine-tuning
-    const checkStatus = async () => {
-        try {
-            const response = await fetch(`/api/status/${sessionId}`);
-            const data = await response.json();
-            
-            if (!data.success) {
-                throw new Error(data.error || 'Status check failed');
-            }
-            
-            const fineTuningStatus = data.fine_tuning;
-            
-            // Update progress UI
-            if (fineTuningStatus) {
-                // Simulate progress if exact progress not available
-                const progress = fineTuningStatus.progress || (
-                    fineTuningStatus.status === 'completed' ? 100 : 
-                    fineTuningStatus.status === 'training' ? 60 :
-                    fineTuningStatus.status === 'starting' ? 30 : 10
-                );
-                
-                fineTuneProgressFill.style.width = `${progress}%`;
-                fineTuneDetails.textContent = fineTuningStatus.message || 'Fine-tuning in progress...';
-                
-                if (fineTuningStatus.status === 'completed') {
-                    // Fine-tuning complete
-                    handleFineTuningComplete(fineTuningStatus);
-                    return true;
-                } else if (fineTuningStatus.status === 'error') {
-                    // Fine-tuning failed
-                    showStatusMessage(`Fine-tuning failed: ${fineTuningStatus.message}`, 'error');
-                    fineTuneProgress.style.display = 'none';
-                    fineTuneBtn.disabled = false;
-                    return true;
-                }
-            }
-            
-            return false;
-        } catch (error) {
-            console.error('Status check failed:', error);
-            return false;
-        }
-    };
-    
-    // Initial check
-    if (await checkStatus()) return;
-    
-    // Continue polling
-    const interval = setInterval(async () => {
-        if (await checkStatus()) {
-            clearInterval(interval);
-        }
-    }, 3000);
-}
-
-function handleFineTuningComplete(fineTuningStatus) {
+function handleFineTuningComplete(data) {
     // Mark step 3 as completed
     step3.classList.remove('active');
     step3.classList.add('completed');
@@ -484,16 +516,17 @@ function handleFineTuningComplete(fineTuningStatus) {
     successMessage.textContent = `Fine-tuning completed successfully! Your model based on ${selectedModelInfo.name} is ready for download.`;
     
     // Set up download button
-    if (fineTuningStatus.download_path) {
+    if (data.download_url) {
         downloadBtn.style.display = 'inline-flex';
         downloadBtn.onclick = () => {
-            window.location.href = `/api/download/${fineTuningStatus.download_path}`;
+            window.location.href = data.download_url;
             showStatusMessage('Download started!', 'success');
         };
     }
     
     showStatusMessage('Fine-tuning completed successfully!', 'success');
     fineTuneProgress.style.display = 'none';
+    hideLoadingOverlay();
     
     // Scroll to results
     resultsCard.scrollIntoView({ behavior: 'smooth' });
@@ -544,4 +577,11 @@ window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
     showStatusMessage('An unexpected error occurred', 'error');
     hideLoadingOverlay();
+});
+
+// Close SSE connection when page unloads
+window.addEventListener('beforeunload', () => {
+    if (progressEventSource) {
+        progressEventSource.close();
+    }
 });
