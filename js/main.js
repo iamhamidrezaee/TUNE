@@ -2,11 +2,14 @@
 const fileInput = document.getElementById('fileInput');
 const fileUploadArea = document.getElementById('fileUploadArea');
 const uploadBtn = document.getElementById('uploadBtn');
-const modelSelect = document.getElementById('modelSelect');
-const modelInfo = document.getElementById('modelInfo');
 const fineTuneBtn = document.getElementById('fineTuneBtn');
 const statusMessages = document.getElementById('statusMessages');
 const loadingOverlay = document.getElementById('loadingOverlay');
+
+// Model category containers
+const lightweightModelsContainer = document.getElementById('lightweight-models');
+const balancedModelsContainer = document.getElementById('balanced-models');
+const performanceModelsContainer = document.getElementById('performance-models');
 
 // Progress elements
 const uploadProgress = document.getElementById('uploadProgress');
@@ -34,6 +37,7 @@ const wavePaths = document.querySelectorAll('.wave-path, .wave-path-2');
 // State
 let sessionId = null;
 let selectedModelInfo = null;
+let selectedModelElement = null;
 let mouseMoveTimeout = null;
 let progressEventSource = null;
 
@@ -66,9 +70,6 @@ function setupEventListeners() {
     
     // Upload button
     uploadBtn.addEventListener('click', uploadFile);
-    
-    // Model selection
-    modelSelect.addEventListener('change', handleModelSelect);
     
     // Fine-tune button
     fineTuneBtn.addEventListener('click', startFineTuning);
@@ -217,7 +218,7 @@ async function loadModels() {
         hideLoadingOverlay();
         
         if (data.success) {
-            populateModelSelect(data.models);
+            populateModelOptions(data.models);
         } else {
             throw new Error(data.error || 'Failed to load models');
         }
@@ -228,49 +229,109 @@ async function loadModels() {
     }
 }
 
-function populateModelSelect(models) {
-    // Clear select and add default option
-    modelSelect.innerHTML = '<option value="">— Select a model —</option>';
+function populateModelOptions(models) {
+    // Clear existing models
+    lightweightModelsContainer.innerHTML = '';
+    balancedModelsContainer.innerHTML = '';
+    performanceModelsContainer.innerHTML = '';
     
-    if (models && models.length > 0) {
-        models.forEach(model => {
-            const option = document.createElement('option');
-            option.value = model.model_id;
-            option.textContent = `${model.name} (${model.size})`;
-            option.dataset.modelData = JSON.stringify(model);
-            modelSelect.appendChild(option);
-        });
-        
-        showStatusMessage(`Loaded ${models.length} available models`, 'success');
-    } else {
-        modelSelect.innerHTML = '<option value="">No models available</option>';
+    if (!models || models.length === 0) {
         showStatusMessage('No models found in configuration.', 'error');
+        return;
     }
+    
+    // Sort models by size (smallest first)
+    const sortedModels = [...models].sort((a, b) => {
+        const sizeA = parseFloat(a.size);
+        const sizeB = parseFloat(b.size);
+        return sizeA - sizeB;
+    });
+    
+    // Categorize and add models to appropriate containers
+    sortedModels.forEach(model => {
+        const modelSize = parseFloat(model.size);
+        const container = 
+            modelSize <= 3 ? lightweightModelsContainer :
+            modelSize <= 7 ? balancedModelsContainer :
+            performanceModelsContainer;
+            
+        // Create model card element
+        const modelCard = createModelCard(model);
+        container.appendChild(modelCard);
+    });
+    
+    showStatusMessage(`Loaded ${models.length} available models`, 'success');
+    
+    // Add click event listeners to all model options
+    document.querySelectorAll('.model-option').forEach(option => {
+        option.addEventListener('click', () => selectModel(option));
+    });
 }
 
-function handleModelSelect() {
-    const selectedOption = modelSelect.selectedOptions[0];
+function createModelCard(model) {
+    const modelSize = parseFloat(model.size);
     
-    if (selectedOption && selectedOption.dataset.modelData) {
-        selectedModelInfo = JSON.parse(selectedOption.dataset.modelData);
-        displayModelInfo(selectedModelInfo);
-        fineTuneBtn.disabled = false;
-    } else {
-        hideModelInfo();
-        fineTuneBtn.disabled = true;
+    // Determine metrics based on model size
+    const speedMetric = modelSize <= 3 ? 'high' : 
+                        modelSize <= 7 ? 'medium' : 'low';
+                        
+    const qualityMetric = modelSize <= 3 ? 'medium-low' : 
+                        modelSize <= 7 ? 'medium-high' : 'high';
+    
+    const div = document.createElement('div');
+    div.className = 'model-option';
+    div.setAttribute('data-model-id', model.model_id);
+    div.setAttribute('data-model-info', JSON.stringify(model));
+    
+    div.innerHTML = `
+        <div class="model-option-header">
+            <div class="model-name">${model.name.split('-')[0]}</div>
+            <div class="model-size">${model.size}</div>
+        </div>
+        <div class="model-description">
+            ${truncateText(model.description || 'No description available', 100)}
+        </div>
+        <div class="model-metrics">
+            <div class="metric">
+                <span>Speed</span>
+                <div class="metric-bar speed ${speedMetric}"></div>
+            </div>
+            <div class="metric">
+                <span>Quality</span>
+                <div class="metric-bar quality ${qualityMetric}"></div>
+            </div>
+        </div>
+    `;
+    
+    return div;
+}
+
+function truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
+}
+
+function selectModel(modelElement) {
+    // Clear previous selection
+    if (selectedModelElement) {
+        selectedModelElement.classList.remove('selected');
     }
-}
-
-function displayModelInfo(model) {
-    document.getElementById('modelSize').textContent = model.size || 'Unknown';
-    document.getElementById('modelFamily').textContent = model.family || 'Unknown';
-    document.getElementById('modelDescription').textContent = model.description || 'No description available';
     
-    modelInfo.style.display = 'block';
-}
-
-function hideModelInfo() {
-    modelInfo.style.display = 'none';
+    // Update selection
+    modelElement.classList.add('selected');
+    selectedModelElement = modelElement;
+    
+    // Update selected model info
+    const modelId = modelElement.getAttribute('data-model-id');
+    selectedModelInfo = JSON.parse(modelElement.getAttribute('data-model-info'));
+    
+    // Store selected model ID
+    document.getElementById('selectedModelId').value = modelId;
+    
+    // Enable fine-tune button
+    fineTuneBtn.disabled = false;
+    
+    showStatusMessage(`Selected model: ${selectedModelInfo.name}`, 'success');
 }
 
 async function uploadFile() {
@@ -406,9 +467,6 @@ function handleDocumentConversionProgress(data) {
         // Activate step 2
         step2.classList.add('active');
         
-        // Enable model selection
-        modelSelect.disabled = false;
-        
         showStatusMessage('Document processing completed successfully!', 'success');
         uploadProgress.style.display = 'none';
         hideLoadingOverlay();
@@ -460,7 +518,7 @@ function handleFineTuningProgress(data) {
 }
 
 async function startFineTuning() {
-    if (!sessionId || !modelSelect.value) {
+    if (!sessionId || !document.getElementById('selectedModelId').value) {
         showStatusMessage('Please complete upload and select a model first', 'error');
         return;
     }
@@ -476,7 +534,7 @@ async function startFineTuning() {
             },
             body: JSON.stringify({
                 session_id: sessionId,
-                model_id: modelSelect.value
+                model_id: document.getElementById('selectedModelId').value
             })
         });
         

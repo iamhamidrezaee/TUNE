@@ -33,13 +33,11 @@
             </path>
         </svg>
     </div>
-
     <div class="container">
         <header>
             <img src="style/images/Tune_logo.png" alt="TUNE Logo" class="logo">
             <p class="subtitle">Upload, Select, Fine-Tune</p>
         </header>
-
         <!-- Step 1: Upload -->
         <div class="step-card" id="step1">
             <div class="step-header">
@@ -74,7 +72,6 @@
                 <div class="progress-details" id="uploadDetails">Starting upload...</div>
             </div>
         </div>
-
         <!-- Step 2: Select Model -->
         <div class="step-card" id="step2">
             <div class="step-header">
@@ -91,6 +88,9 @@
                             </svg>
                             <h3 class="category-title">Fast & Lightweight</h3>
                         </div>
+                        <div class="model-tooltip">
+                            Small models (1-3B) that prioritize speed over output quality. Great for simple tasks or resource-constrained environments.
+                        </div>
                         <div class="model-options" id="lightweight-models">
                             <!-- Model options will be inserted here by JavaScript -->
                         </div>
@@ -105,6 +105,9 @@
                             </svg>
                             <h3 class="category-title">Balanced Performance</h3>
                         </div>
+                        <div class="model-tooltip">
+                            Medium-sized models (7B) offering a good balance between speed and quality. Recommended for most general use cases.
+                        </div>
                         <div class="model-options" id="balanced-models">
                             <!-- Model options will be inserted here by JavaScript -->
                         </div>
@@ -118,6 +121,9 @@
                             </svg>
                             <h3 class="category-title">High Performance</h3>
                         </div>
+                        <div class="model-tooltip">
+                            Larger models (13-14B) that prioritize output quality and reasoning abilities but require more processing time and resources.
+                        </div>
                         <div class="model-options" id="performance-models">
                             <!-- Model options will be inserted here by JavaScript -->
                         </div>
@@ -128,7 +134,6 @@
                 <input type="hidden" id="selectedModelId" value="">
             </div>
         </div>
-
         <!-- Step 3: Fine-tune -->
         <div class="step-card" id="step3">
             <div class="step-header">
@@ -151,7 +156,6 @@
                 <div class="progress-details" id="fineTuneDetails">Initializing...</div>
             </div>
         </div>
-
         <!-- Results -->
         <div class="results-card" id="resultsCard" style="display: none;">
             <div class="results-header">
@@ -173,17 +177,14 @@
                 </button>
             </div>
         </div>
-
         <!-- Status Messages -->
         <div class="status-messages" id="statusMessages"></div>
     </div>
-
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay" style="display: none;">
         <div class="loading-spinner"></div>
         <div class="loading-text">Processing...</div>
     </div>
-
     <script src="js/main.js"></script>
 </body>
 </html>

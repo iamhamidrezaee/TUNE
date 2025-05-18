@@ -142,3 +142,42 @@
 2025-05-18 15:44:47,877 - INFO - 127.0.0.1 - - [18/May/2025 15:44:47] "GET /js/main.js HTTP/1.1" 200 -
 2025-05-18 15:45:48,303 - INFO -  * Detected change in 'C:\\Users\\hamed\\Desktop\\tune\\app.py', reloading
 2025-05-18 15:45:51,710 - INFO -  * Restarting with stat
+2025-05-18 15:54:54,899 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:54:54,899 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:54:54,899 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:54:54,899 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:54:54,903 - INFO - Loaded 10 models from config
+2025-05-18 15:54:54,927 - INFO - Document converter initialized
+2025-05-18 15:54:54,932 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:54:54,933 - INFO - Server running on http://localhost:8000
+2025-05-18 15:54:54,956 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8000
+ * Running on http://10.48.104.8:8000
+2025-05-18 15:54:54,956 - INFO - [33mPress CTRL+C to quit[0m
+2025-05-18 15:54:54,961 - INFO -  * Restarting with stat
+2025-05-18 15:55:10,828 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\uploads
+2025-05-18 15:55:10,828 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\converted
+2025-05-18 15:55:10,828 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\outputs
+2025-05-18 15:55:10,828 - INFO - Created/verified directory: C:\Users\hamed\Desktop\tune\misc\models
+2025-05-18 15:55:10,828 - INFO - Loaded 10 models from config
+2025-05-18 15:55:10,828 - INFO - Document converter initialized
+2025-05-18 15:55:10,845 - INFO - Starting LLM Fine-tuning Pipeline Server
+2025-05-18 15:55:10,846 - INFO - Server running on http://localhost:8000
+2025-05-18 15:55:10,856 - WARNING -  * Debugger is active!
+2025-05-18 15:55:10,867 - INFO -  * Debugger PIN: 102-550-187
+2025-05-18 15:55:10,981 - INFO - 127.0.0.1 - - [18/May/2025 15:55:10] "GET / HTTP/1.1" 200 -
+2025-05-18 15:55:11,058 - INFO - 127.0.0.1 - - [18/May/2025 15:55:11] "GET /style/styles.css HTTP/1.1" 200 -
+2025-05-18 15:55:11,066 - INFO - 127.0.0.1 - - [18/May/2025 15:55:11] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:55:11,105 - INFO - 127.0.0.1 - - [18/May/2025 15:55:11] "GET /js/main.js HTTP/1.1" 200 -
+2025-05-18 15:55:11,132 - INFO - Fetching available models
+2025-05-18 15:55:11,132 - INFO - Returning 10 models
+2025-05-18 15:55:11,132 - INFO - 127.0.0.1 - - [18/May/2025 15:55:11] "GET /api/models HTTP/1.1" 200 -
+2025-05-18 15:56:07,494 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "GET / HTTP/1.1" 200 -
+2025-05-18 15:56:07,560 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "[36mGET /style/styles.css HTTP/1.1[0m" 304 -
+2025-05-18 15:56:07,574 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "[36mGET /style/images/Tune_logo.png HTTP/1.1[0m" 304 -
+2025-05-18 15:56:07,575 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "[36mGET /js/main.js HTTP/1.1[0m" 304 -
+2025-05-18 15:56:07,586 - INFO - Fetching available models
+2025-05-18 15:56:07,586 - INFO - Returning 10 models
+2025-05-18 15:56:07,586 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "GET /api/models HTTP/1.1" 200 -
+2025-05-18 15:56:07,716 - INFO - 127.0.0.1 - - [18/May/2025 15:56:07] "[36mGET /style/images/favicon.png HTTP/1.1[0m" 304 -
